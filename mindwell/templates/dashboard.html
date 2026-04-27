@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Header Section -->
+    <div
+        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 20px;">
+        <div>
+            <h1>Hello, <span>{{ user.name }}!</span> 👋</h1>
+            <p style="color: var(--text-grey); font-size: 1.1rem;">Ready to crush your goals today?</p>
+        </div>
+
+        <div class="card"
+            style="padding: 1rem 2rem; display: flex; align-items: center; gap: 25px; border-radius: 50px; background: rgba(36, 39, 49, 0.8);">
+            <div style="text-align: center;">
+                <h3 style="color: var(--accent); margin-bottom: 0; font-size: 1.5rem;">{{ user.streak }} 🔥</h3>
+                <small
+                    style="text-transform: uppercase; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px;">Streak</small>
+            </div>
+            <div style="height: 40px; width: 1px; background: var(--border);"></div>
+            <div style="text-align: center;">
+                <h3 style="color: var(--success); margin-bottom: 0; font-size: 1.5rem;">{{ user.points }} 💎</h3>
+                <small
+                    style="text-transform: uppercase; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px;">Points</small>
+            </div>
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ user.name }}" alt="Avatar"
+                style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid var(--primary); box-shadow: 0 0 15px rgba(108, 93, 211, 0.5);">
+
+            <div style="display: flex; gap: 5px;">
+                <button onclick="window.location.reload()" class="btn btn-secondary"
+                    style="padding: 0.8rem; border-radius: 50%;" title="Refresh">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary" style="padding: 0.8rem; border-radius: 50%;"
+                    title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Quest / Scenario Section -->
+    <div class="card"
+        style="background: linear-gradient(135deg, rgba(108, 93, 211, 0.2), rgba(255, 117, 76, 0.1)); border: 1px solid rgba(108, 93, 211, 0.3); margin-bottom: 3rem; position: relative; overflow: hidden; padding: 2.5rem;">
+        <div style="position: relative; z-index: 2;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                <div>
+                    <h3 style="display: flex; align-items: center; gap: 10px; font-size: 1.4rem;">
+                        <i class="fas fa-scroll" style="color: var(--accent);"></i>
+                        Daily Scenario
+                    </h3>
+                    <p style="color: var(--text-grey); font-size: 0.9rem;">Complete this to boost your resilience.</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <a href="{{ url_for('refresh_scenario') }}" class="btn btn-secondary"
+                        style="font-size: 0.8rem; padding: 0.5rem 1rem;">
+                        <i class="fas fa-dice"></i> Shuffle
+                    </a>
+                    <span class="badge"
+                        style="background: linear-gradient(45deg, #FF754C, #FF4D4D); color: white; padding: 0.4rem 1rem; box-shadow: 0 4px 10px rgba(255, 117, 76, 0.4);">
+                        +20 PTS
+                    </span>
+                </div>
+            </div>
+
+            <h2
+                style="font-size: 2rem; margin-bottom: 1rem; background: linear-gradient(to right, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                {{ user.current_quest.title }}
+            </h2>
+            <p style="color: #ccc; margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.6; max-width: 800px;">
+                {{ user.current_quest.description }}
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                {% for option in user.current_quest.options %}
+                <button class="btn" onclick="alert('{{ option.feedback }}')"
+                    style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); justify-content: space-between; padding: 1.2rem; height: auto; text-align: left;">
+                    <span>{{ option.text }}</span>
+                    <i class="fas fa-arrow-right" style="opacity: 0.5;"></i>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Background decoration -->
+        <i class="fas fa-gamepad"
+            style="position: absolute; right: -30px; bottom: -40px; font-size: 15rem; color: rgba(255,255,255,0.02); transform: rotate(-20deg);"></i>
+        <div
+            style="position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: var(--primary); filter: blur(150px); opacity: 0.2;">
+        </div>
+    </div>
+
+    <!-- Quick Actions Grid -->
+    <h3 style="margin-bottom: 1.5rem; padding-left: 10px; border-left: 4px solid var(--accent);">Quick Actions</h3>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-bottom: 3rem;">
+
+        <!-- PHQ-9 Card -->
+        <div class="card" onclick="location.href='{{ url_for('assessment', type='phq9') }}'"
+            style="cursor: pointer; position: relative; overflow: hidden;">
+            <div
+                style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: var(--primary); filter: blur(60px); opacity: 0.2;">
+            </div>
+            <div
+                style="width: 60px; height: 60px; background: rgba(108, 93, 211, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-frown" style="font-size: 1.8rem; color: var(--primary);"></i>
+            </div>
+            <h3>Depression Check</h3>
+            <p style="font-size: 0.95rem; color: var(--text-grey);">Take the PHQ-9 test to map your mood.</p>
+        </div>
+
+        <!-- GAD-7 Card -->
+        <div class="card" onclick="location.href='{{ url_for('assessment', type='gad7') }}'"
+            style="cursor: pointer; position: relative; overflow: hidden;">
+            <div
+                style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: var(--accent); filter: blur(60px); opacity: 0.2;">
+            </div>
+            <div
+                style="width: 60px; height: 60px; background: rgba(255, 117, 76, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-wind" style="font-size: 1.8rem; color: var(--accent);"></i>
+            </div>
+            <h3>Anxiety Check</h3>
+            <p style="font-size: 0.95rem; color: var(--text-grey);">GAD-7 assessment for stress levels.</p>
+        </div>
+
+        <div class="card" onclick="location.href='{{ url_for('rppg') }}'"
+            style="cursor: pointer; position: relative; overflow: hidden;">
+            <div
+                style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: #FF5C5C; filter: blur(60px); opacity: 0.2;">
+            </div>
+            <div
+                style="width: 60px; height: 60px; background: rgba(255, 92, 92, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-heartbeat" style="font-size: 1.8rem; color: #FF5C5C;"></i>
+            </div>
+            <h3>Vitals Scan</h3>
+            <p style="font-size: 0.95rem; color: var(--text-grey);">Measure heart rate via camera.</p>
+        </div>
+
+        <div class="card" onclick="location.href='{{ url_for('chatbot') }}'"
+            style="cursor: pointer; position: relative; overflow: hidden;">
+            <div
+                style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: #4CD964; filter: blur(60px); opacity: 0.2;">
+            </div>
+            <div
+                style="width: 60px; height: 60px; background: rgba(76, 217, 100, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-robot" style="font-size: 1.8rem; color: #4CD964;"></i>
+            </div>
+            <h3>AI Companion</h3>
+            <p style="font-size: 0.95rem; color: var(--text-grey);">24/7 chat support and guidance.</p>
+        </div>
+
+        <div class="card" onclick="location.href='{{ url_for('journal') }}'"
+            style="cursor: pointer; position: relative; overflow: hidden;">
+            <div
+                style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: #FFCC00; filter: blur(60px); opacity: 0.2;">
+            </div>
+            <div
+                style="width: 60px; height: 60px; background: rgba(255, 204, 0, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-book-open" style="font-size: 1.8rem; color: #FFCC00;"></i>
+            </div>
+            <h3>Daily Journal</h3>
+            <p style="font-size: 0.95rem; color: var(--text-grey);">Track your thoughts and mood.</p>
+        </div>
+
+    </div>
+
+    <!-- History & Community Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; align-items: start;">
+
+        <!-- History -->
+        <div>
+            <h3 style="margin-bottom: 1.5rem; padding-left: 10px; border-left: 4px solid var(--primary);">Recent History
+            </h3>
+            {% if history %}
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead style="background: rgba(108, 93, 211, 0.1);">
+                        <tr>
+                            <th
+                                style="padding: 18px; text-align: left; color: var(--primary); font-size: 0.9rem; text-transform: uppercase;">
+                                Type</th>
+                            <th
+                                style="padding: 18px; text-align: left; color: var(--primary); font-size: 0.9rem; text-transform: uppercase;">
+                                Score</th>
+                            <th
+                                style="padding: 18px; text-align: left; color: var(--primary); font-size: 0.9rem; text-transform: uppercase;">
+                                Severity</th>
+                            <th
+                                style="padding: 18px; text-align: left; color: var(--primary); font-size: 0.9rem; text-transform: uppercase;">
+                                Date</th>
+                            <th style="padding: 18px; text-align: left;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in history %}
+                        <tr style="border-bottom: 1px solid var(--border); transition: 0.2s; cursor: default;"
+                            onmouseover="this.style.background='rgba(255,255,255,0.02)'"
+                            onmouseout="this.style.background='transparent'">
+                            <td style="padding: 18px; font-weight: 500;">
+                                {% if item.type == 'phq9' %}
+                                <span style="color: var(--primary);"><i class="fas fa-frown"></i> Depression</span>
+                                {% else %}
+                                <span style="color: var(--accent);"><i class="fas fa-wind"></i> Anxiety</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 18px; font-weight: bold; font-family: monospace; font-size: 1.1rem;">{{
+                                item.score }}</td>
+                            <td style="padding: 18px;">
+                                <span class="badge"
+                                    style="
+                                    {% if item.severity == 'Severe' %}background: rgba(255, 77, 77, 0.2); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.3);
+                                    {% elif item.severity == 'Moderate' %}background: rgba(255, 204, 0, 0.2); color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.3);
+                                    {% else %}background: rgba(76, 217, 100, 0.2); color: #4cd964; border: 1px solid rgba(76, 217, 100, 0.3);{% endif %}">
+                                    {{ item.severity }}
+                                </span>
+                            </td>
+                            <td style="padding: 18px; color: var(--text-grey); font-size: 0.9rem;">{{ item.date }}</td>
+                            <td style="padding: 18px;">
+                                <form action="{{ url_for('delete_assessment', id=item.id) }}" method="POST"
+                                    style="display:inline;">
+                                    <button type="submit" class="btn"
+                                        style="background: transparent; color: #FF4D4D; padding: 5px; box-shadow: none;"
+                                        title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="card" style="text-align: center; padding: 4rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                <p style="color: var(--text-grey);">No assessments yet. Start your journey above!</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Community Sidebar -->
+        <div>
+            <h3 style="margin-bottom: 1.5rem; padding-left: 10px; border-left: 4px solid var(--secondary);">Community
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 15px;">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=DrEmily"
+                        style="width: 50px; height: 50px; border-radius: 50%;">
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0; font-size: 1rem;">Dr. Emily</h4>
+                        <small style="color: var(--primary);">Licensed Therapist</small>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 0.5rem;"><i
+                            class="fas fa-comment-medical"></i></button>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 15px;">
+                    <div
+                        style="width: 50px; height: 50px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                        AS</div>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0; font-size: 1rem;">Anxiety Support</h4>
+                        <small style="color: var(--text-grey);">120 Members</small>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 0.5rem;"><i class="fas fa-user-plus"></i></button>
+                </div>
+
+                <a href="{{ url_for('community') }}" class="card"
+                    style="padding: 1rem; text-align: center; color: var(--text-grey); text-decoration: none; border-style: dashed;">
+                    View All
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Mind Garden Modal (Popup) -->
+<div id="gardenModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; backdrop-filter: blur(5px);">
+    <div class="card"
+        style="width: 90%; max-width: 500px; text-align: center; position: relative; overflow: hidden; background: {% if user.tree_level > 2 %}linear-gradient(to bottom, #87CEEB, #E0F7FA){% else %}linear-gradient(to bottom, #2C3E50, #4CA1AF){% endif %}; transform: scale(0.8); transition: 0.3s; border: none;">
+
+        <span onclick="closeGarden()"
+            style="position: absolute; top: 15px; right: 15px; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10; background: rgba(0,0,0,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</span>
+
+        <h2
+            style="position: relative; z-index: 2; color: {% if user.tree_level > 2 %}#1a5f7a{% else %}white{% endif %}; text-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-top: 20px; font-size: 2rem;">
+            My Mind Garden</h2>
+        <p
+            style="position: relative; z-index: 2; color: {% if user.tree_level > 2 %}#2c3e50{% else %}#ddd{% endif %}; font-weight: 500;">
+            Level {{ user.tree_level }} - {% if user.tree_level == 0 %}Needs care{% elif user.tree_level < 3
+                %}Growing...{% else %}Thriving!{% endif %}</p>
+
+                <!-- The Tree -->
+                <div
+                    style="font-size: {% if user.tree_level == 0 %}6rem{% else %}{{ 6 + user.tree_level }}rem{% endif %}; margin: 40px 0; display: inline-block; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));">
+                    {% if user.tree_level == 0 %}🪨{% endif %}
+                    {% if user.tree_level == 1 %}🌱{% endif %}
+                    {% if user.tree_level == 2 %}🌿{% endif %}
+                    {% if user.tree_level == 3 %}🌳{% endif %}
+                    {% if user.tree_level == 4 %}🌳🍎{% endif %}
+                    {% if user.tree_level >= 5 %}🌳🐦{% endif %}
+                </div>
+
+                <!-- Environment Decor -->
+                {% if user.tree_level >= 3 %}
+                <div
+                    style="font-size: 3rem; position: absolute; top: 20px; right: 20px; animation: spin 20s linear infinite;">
+                    ☀️</div>
+                {% endif %}
+
+                <div
+                    style="position: relative; z-index: 2; color: white; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 20px; font-size: 0.9rem; margin: 0 20px 20px 20px; backdrop-filter: blur(5px);">
+                    Your garden grows with every daily check-in!
+                    <br>
+                    <button class="btn" onclick="closeGarden()"
+                        style="margin-top: 15px; background: white; color: #333; width: 100%;">Awesome!</button>
+                </div>
+    </div>
+</div>
+
+<script>
+    // Check if show_garden is in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const showGarden = urlParams.get('show_garden');
+
+    const modal = document.getElementById('gardenModal');
+    const content = modal.querySelector('.card');
+
+    if (showGarden) {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            content.style.transform = 'scale(1)';
+        }, 10);
+    }
+
+    function closeGarden() {
+        modal.style.opacity = '0';
+        content.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            // Remove param from URL to prevent showing on refresh
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }, 300);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindwell - Mental Health Companion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Identity Services SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-brain"></i> Mindwell
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('assessment', type='phq9') }}"><i class="fas fa-clipboard-check"></i>
+                    Assessments</a></li>
+            <li><a href="{{ url_for('rppg') }}"><i class="fas fa-heartbeat"></i> rPPG</a></li>
+            <li><a href="{{ url_for('chatbot') }}"><i class="fas fa-robot"></i> AI Chat</a></li>
+            <li><a href="{{ url_for('journal') }}"><i class="fas fa-book-open"></i> Journal</a></li>
+            <li><a href="{{ url_for('community') }}"><i class="fas fa-users"></i> Community <span class="badge"
+                        style="background: var(--accent); color: white; padding: 2px 5px; font-size: 0.6rem; vertical-align: text-top; margin-left: 2px;">NEW</span></a>
+            </li>
+            <li><a href="{{ url_for('counsellors') }}"><i class="fas fa-user-md"></i> Counsellors <span class="badge"
+                        style="background: var(--accent); color: white; padding: 2px 5px; font-size: 0.6rem; vertical-align: text-top; margin-left: 2px;">NEW</span></a>
+            </li>
+            <li><a href="{{ url_for('resources') }}"><i class="fas fa-spa"></i> Resources</a></li>
+            <li><a href="{{ url_for('sos') }}" class="sos-btn">SOS</a></li>
+            <li style="margin-left: 10px;">
+                <button onclick="toggleTheme()" class="btn"
+                    style="padding: 0.5rem; background: transparent; color: var(--text-grey); border: 1px solid var(--border);">
+                    <i id="themeIcon" class="fas fa-moon"></i>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

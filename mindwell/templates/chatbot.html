@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 600px; margin: 0 auto; min-height: 80vh; display: flex; flex-direction: column;">
+    <h1 style="text-align: center; margin-bottom: 20px;">AI Companion</h1>
+
+    <div class="card" style="flex: 1; display: flex; flex-direction: column; padding: 0;">
+        <div id="chat-window"
+            style="flex: 1; padding: 20px; overflow-y: auto; max-height: 60vh; background: rgba(0,0,0,0.2);">
+            <!-- Messages go here -->
+            <div style="display: flex; margin-bottom: 15px;">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=mindwell"
+                    style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                <div
+                    style="background: var(--bg-light); padding: 10px 15px; border-radius: 0 15px 15px 15px; max-width: 80%; border: 1px solid var(--border);">
+                    Hi! I'm your Mindwell companion. How are you feeling today?
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 20px; border-top: 1px solid var(--border);">
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="user-input" placeholder="Type your message..." style="margin-bottom: 0;">
+                <button id="send-btn" class="btn"
+                    style="border-radius: 12px; width: 60px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const chatWindow = document.getElementById('chat-window');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    function appendMessage(text, isUser) {
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.marginBottom = '15px';
+        div.style.justifyContent = isUser ? 'flex-end' : 'flex-start';
+
+        const content = `
+            ${!isUser ? `<img src="https://api.dicebear.com/7.x/bottts/svg?seed=mindwell" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">` : ''}
+            <div style="background: ${isUser ? 'var(--primary)' : 'var(--bg-light)'}; padding: 10px 15px; border-radius: ${isUser ? '15px 0 15px 15px' : '0 15px 15px 15px'}; max-width: 80%; ${!isUser ? 'border: 1px solid var(--border);' : ''}">
+                ${text}
+            </div>
+            ${isUser ? `<img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ user.name }}" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 10px; border: 2px solid var(--primary);">` : ''}
+        `;
+        div.innerHTML = content;
+        chatWindow.appendChild(div);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        appendMessage(text, true);
+        userInput.value = '';
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await response.json();
+
+            // Artificial delay for realism
+            setTimeout(() => {
+                appendMessage(data.response, false);
+            }, 500);
+
+        } catch (error) {
+            console.error('Error:', error);
+            appendMessage("Sorry, I'm having trouble connecting right now.", false);
+        }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>
+{% endblock %}

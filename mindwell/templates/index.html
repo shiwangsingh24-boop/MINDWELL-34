@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="landing-page">
+
+    <!-- HERO SECTION -->
+    <section class="hero-section"
+        style="background: url('{{ url_for('static', filename='images/landing_hero.png') }}') center/cover no-repeat;">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text fade-in-up">
+                <h1 class="main-title">Wellness Reimagined.</h1>
+                <p class="hero-subtitle">Your AI-powered companion for a balanced mind. Track, assess, and grow with
+                    Mindwell.</p>
+                <div class="hero-badges">
+                    <span class="badge-pill"><i class="fas fa-robot"></i> AI Chat</span>
+                    <span class="badge-pill"><i class="fas fa-heartbeat"></i> Biofeedback</span>
+                    <span class="badge-pill"><i class="fas fa-shield-alt"></i> Private</span>
+                </div>
+            </div>
+
+            <!-- LOGIN CARD (Floating) -->
+            <div class="login-card fade-in-up delay-200">
+                <div class="glass-panel">
+                    <h2 id="authTitle">Welcome Back</h2>
+                    <p class="login-sub" id="authSub">Continue your journey today.</p>
+
+                    <form action="{{ url_for('login') }}" method="POST" id="authForm">
+                        <input type="hidden" name="action" id="authAction" value="login">
+                        
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" name="username" id="usernameInput" placeholder="Username">
+                        </div>
+                        
+                        <div class="input-group" id="emailGroup" style="display: none;">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" name="email" id="emailInput" placeholder="Email Address">
+                        </div>
+                        
+                        <div class="input-group" id="passwordGroup">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" name="password" id="passwordInput" placeholder="Password">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block" id="authSubmitBtn">
+                            Start Session <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+
+                    <div style="display: flex; align-items: center; margin: 1.5rem 0; color: var(--text-grey);">
+                        <div style="flex: 1; height: 1px; background: var(--border);"></div>
+                        <span style="padding: 0 10px; font-size: 0.9rem;">or</span>
+                        <div style="flex: 1; height: 1px; background: var(--border);"></div>
+                    </div>
+
+                    <!-- Real Google Sign-In Button -->
+                    <div id="g_id_onload"
+                        data-client_id="522137806672-a5mvig6sr2ktr15jgjhlgemb59j7ikfg.apps.googleusercontent.com"
+                        data-context="signin"
+                        data-ux_mode="popup"
+                        data-callback="handleGoogleCallback"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin" style="width: 100%;"
+                        data-type="standard"
+                        data-shape="rectangular"
+                        data-theme="outline"
+                        data-text="signin_with"
+                        data-size="large"
+                        data-logo_alignment="left"
+                        data-width="340">
+                    </div>
+
+                    <p class="auth-footer" id="authFooterText">No account? <a href="#" onclick="toggleAuthMode(event)">Join Free</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleAuthMode(e) {
+            e.preventDefault();
+            const isLogin = document.getElementById('authAction').value === 'login';
+            document.getElementById('authAction').value = isLogin ? 'register' : 'login';
+            document.getElementById('authTitle').textContent = isLogin ? 'Create Account' : 'Welcome Back';
+            document.getElementById('authSub').textContent = isLogin ? 'Start your wellness journey.' : 'Continue your journey today.';
+            document.getElementById('authSubmitBtn').innerHTML = isLogin ? 'Create Account <i class="fas fa-arrow-right"></i>' : 'Start Session <i class="fas fa-arrow-right"></i>';
+            document.getElementById('emailGroup').style.display = isLogin ? 'block' : 'none';
+            document.getElementById('emailInput').required = isLogin;
+            document.getElementById('usernameInput').required = true;
+            document.getElementById('passwordInput').required = true;
+            const footerHtml = isLogin ?
+                'Already have an account? <a href="#" onclick="toggleAuthMode(event)">Sign In</a>' :
+                'No account? <a href="#" onclick="toggleAuthMode(event)">Join Free</a>';
+            document.getElementById('authFooterText').innerHTML = footerHtml;
+        }
+
+        // Real Google Sign-In callback
+        function handleGoogleCallback(response) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/auth/google';
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'credential';
+            input.value = response.credential;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+
+    <!-- FEATURES SECTION -->
+    <section class="features-section">
+        <div class="section-header">
+            <h2>Why Mindwell?</h2>
+            <p>Holistic tools designed for the modern student.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon-box color-1"><i class="fas fa-brain"></i></div>
+                <h3>Smart Analysis</h3>
+                <p>AI-driven insights from your journal entries and mood patterns.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box color-2"><i class="fas fa-camera"></i></div>
+                <h3>rPPG Tech</h3>
+                <p>Measure heart rate and stress levels using just your webcam.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box color-3"><i class="fas fa-users"></i></div>
+                <h3>Community</h3>
+                <p>Connect with peers and counsellors in a safe, moderated space.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box color-4"><i class="fas fa-gamepad"></i></div>
+                <h3>Gamified Growth</h3>
+                <p>Earn points, level up your tree, and build healthy habits.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3><i class="fas fa-leaf"></i> Mindwell</h3>
+                <p>&copy; 2025 Mindwell Inc.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}

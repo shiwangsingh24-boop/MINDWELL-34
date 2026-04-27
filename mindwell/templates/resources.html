@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fade-in">
+    <h1 style="text-align: center; margin-bottom: 10px;">Wellness Resources</h1>
+    <p style="text-align: center; color: var(--text-grey); margin-bottom: 40px;">Curated tools for your mental and
+        physical growth.</p>
+
+    <!-- Navigation Pills (Optional, for smooth scroll or just visual separation) -->
+    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
+        <span class="badge"
+            style="background: rgba(108, 93, 211, 0.2); color: var(--primary); padding: 5px 15px; border-radius: 20px;">📚
+            Education</span>
+        <span class="badge"
+            style="background: rgba(76, 217, 100, 0.2); color: #4CD964; padding: 5px 15px; border-radius: 20px;">🧘
+            Exercises</span>
+        <span class="badge"
+            style="background: rgba(255, 117, 76, 0.2); color: var(--accent); padding: 5px 15px; border-radius: 20px;">🏃
+            Sports</span>
+        <span class="badge"
+            style="background: rgba(255, 204, 0, 0.2); color: #FFCC00; padding: 5px 15px; border-radius: 20px;">🛠️
+            Others</span>
+    </div>
+
+    <!-- SECTION 1: EDUCATION -->
+    <h2
+        style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; color: var(--text-white);">
+        📚 Education & Knowledge
+    </h2>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 40px;">
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div
+                style="height: 150px; background: url('{{ url_for('static', filename='images/education_anxiety.png') }}') center/cover;">
+            </div>
+            <div style="padding: 1.5rem;">
+                <h3 style="color: var(--primary);">Understanding Anxiety</h3>
+                <p style="color: var(--text-grey); font-size: 0.9rem; margin-bottom: 15px;">
+                    Learn the science behind anxiety and how it affects your body. Knowledge is power.
+                </p>
+                <button class="btn"
+                    style="width: 100%; background: var(--bg-dark); border: 1px solid var(--border);">Read
+                    Article</button>
+            </div>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div
+                style="height: 150px; background: url('{{ url_for('static', filename='images/education_habit.png') }}') center/cover;">
+            </div>
+            <div style="padding: 1.5rem;">
+                <h3 style="color: var(--primary);">The Power of Habit</h3>
+                <p style="color: var(--text-grey); font-size: 0.9rem; margin-bottom: 15px;">
+                    Summary of Charles Duhigg's book on how to build positive mental health loops.
+                </p>
+                <button class="btn"
+                    style="width: 100%; background: var(--bg-dark); border: 1px solid var(--border);">View
+                    Summary</button>
+            </div>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div
+                style="height: 150px; background: url('{{ url_for('static', filename='images/education_cbt.png') }}') center/cover;">
+            </div>
+            <div style="padding: 1.5rem;">
+                <h3 style="color: var(--primary);">CBT Basics</h3>
+                <p style="color: var(--text-grey); font-size: 0.9rem; margin-bottom: 15px;">
+                    An introduction to Cognitive Behavioral Therapy techniques you can try at home.
+                </p>
+                <button class="btn"
+                    style="width: 100%; background: var(--bg-dark); border: 1px solid var(--border);">Watch
+                    Video</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: EXERCISES -->
+    <h2
+        style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; color: var(--text-white);">
+        🧘 Mental Exercises
+    </h2>
+    <div class="grid" style="margin-bottom: 40px;">
+        <div class="card" style="border-left: 4px solid #4CD964;">
+            <h3>4-7-8 Breathing</h3>
+            <p style="color: var(--text-grey); font-size: 0.9rem;">
+                Inhale for 4s, hold for 7s, exhale for 8s. Resets your nervous system.
+            </p>
+            <button class="btn" onclick="alert('Starting Timer...')" style="margin-top: 10px; font-size: 0.8rem;">Start
+                Timer</button>
+        </div>
+        <div class="card" style="border-left: 4px solid #4CD964;">
+            <h3>5-4-3-2-1 Grounding</h3>
+            <p style="color: var(--text-grey); font-size: 0.9rem;">
+                A technique to anchor yourself in the present moment during high stress.
+            </p>
+            <button class="btn" style="margin-top: 10px; font-size: 0.8rem;">View Steps</button>
+        </div>
+        <div class="card" style="border-left: 4px solid #4CD964;">
+            <h3>Box Breathing</h3>
+            <p style="color: var(--text-grey); font-size: 0.9rem;">
+                Used by Navy SEALs. Inhale 4s, hold 4s, exhale 4s, hold 4s.
+            </p>
+            <button class="btn" onclick="alert('Starting Timer...')" style="margin-top: 10px; font-size: 0.8rem;">Start
+                Timer</button>
+        </div>
+    </div>
+
+    <!-- SECTION 3: SPORTS -->
+    <h2
+        style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; color: var(--text-white);">
+        🏃 Physical Activity & Sports
+    </h2>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 40px;">
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div
+                style="height: 150px; background: url('https://images.unsplash.com/photo-1552674605-469523f54050?auto=format&fit=crop&w=600&q=80') center/cover;">
+            </div>
+            <div style="padding: 1.5rem;">
+                <h3 style="color: var(--accent);">Running / Jogging</h3>
+                <p style="font-size: 0.9rem; color: var(--text-grey);">"Runner's High" releases endorphins that fight
+                    depression.</p>
+            </div>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div
+                style="height: 150px; background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80') center/cover;">
+            </div>
+            <div style="padding: 1.5rem;">
+                <h3 style="color: var(--accent);">Team Sports</h3>
+                <p style="font-size: 0.9rem; color: var(--text-grey);">Basketball, Football, or any group sport builds
+                    social connection.</p>
+            </div>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div
+                style="height: 150px; background: url('https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=600&q=80') center/cover;">
+            </div>
+            <div style="padding: 1.5rem;">
+                <h3 style="color: var(--accent);">Swimming</h3>
+                <p style="font-size: 0.9rem; color: var(--text-grey);">The rhythmic nature and water sensation is
+                    incredibly soothing.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: OTHERS -->
+    <h2
+        style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; color: var(--text-white);">
+        🛠️ Other Resources
+    </h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div class="card" style="display: flex; align-items: center; gap: 15px;">
+            <i class="fas fa-podcast" style="font-size: 2rem; color: #FFCC00;"></i>
+            <div>
+                <h4 style="margin: 0;">Podcasts</h4>
+                <a href="#" style="color: var(--primary); font-size: 0.8rem;">View Top 10</a>
+            </div>
+        </div>
+        <div class="card" style="display: flex; align-items: center; gap: 15px;">
+            <i class="fas fa-phone-alt" style="font-size: 2rem; color: #FF5C5C;"></i>
+            <div>
+                <h4 style="margin: 0;">Helplines</h4>
+                <a href="{{ url_for('sos') }}" style="color: var(--primary); font-size: 0.8rem;">Emergency Contacts</a>
+            </div>
+        </div>
+        <div class="card" style="display: flex; align-items: center; gap: 15px;">
+            <i class="fas fa-mobile-alt" style="font-size: 2rem; color: var(--secondary);"></i>
+            <div>
+                <h4 style="margin: 0;">Apps</h4>
+                <a href="#" style="color: var(--primary); font-size: 0.8rem;">Recommended</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 800px; margin: 0 auto; text-align: center;">
+    <h1 style="margin-bottom: 10px;">rPPG Vitals Scan</h1>
+    <p style="color: var(--text-grey); margin-bottom: 2rem;">
+        Face the camera in a well-lit environment. We will analyze subtle color changes in your face to estimate your
+        heart rate and stress levels.
+    </p>
+
+    <div class="card" style="position: relative; overflow: hidden; padding: 0;">
+        <div style="position: relative; width: 100%; aspect-ratio: 4/3; background: #000;">
+            <video id="videoElement" autoplay playsinline
+                style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
+            <canvas id="canvasElement" style="display: none;"></canvas>
+
+            <!-- Overlay -->
+            <div id="scanOverlay"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 4px solid var(--primary); box-sizing: border-box; display: none;">
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 20px;">
+                    <i class="fas fa-spinner fa-spin"></i> Scanning... <span id="progress">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 2rem;">
+            <div id="resultsArea" style="display: none; justify-content: space-around; margin-bottom: 20px;">
+                <div>
+                    <h3 style="color: #FF754C; font-size: 2.5rem; margin: 0;" id="hrValue">--</h3>
+                    <small>Heart Rate (BPM)</small>
+                </div>
+                <div>
+                    <h3 style="color: #4CD964; font-size: 2.5rem; margin: 0;" id="stressValue">--</h3>
+                    <small>Stress Level</small>
+                </div>
+            </div>
+
+            <button id="startBtn" class="btn" style="font-size: 1.2rem; padding: 1rem 3rem;">
+                <i class="fas fa-camera"></i> Start Scan
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/rppg.js') }}"></script>
+{% endblock %}

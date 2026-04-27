@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 800px; margin: 0 auto;">
+    <h1 style="text-align: center; margin-bottom: 30px;">Daily Journal</h1>
+
+    <div class="card" style="margin-bottom: 30px;">
+        <h3>New Entry</h3>
+        <form action="{{ url_for('journal') }}" method="POST">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 10px; color: var(--text-grey);">How are you
+                    feeling?</label>
+                <select name="mood" required>
+                    <option value="Happy">😊 Happy</option>
+                    <option value="Calm">😌 Calm</option>
+                    <option value="Sad">😔 Sad</option>
+                    <option value="Anxious">😰 Anxious</option>
+                    <option value="Angry">😠 Angry</option>
+                </select>
+            </div>
+
+            <textarea name="entry" rows="5" placeholder="Write about your day, thoughts, or feelings..."
+                required></textarea>
+
+            <button type="submit" class="btn" style="width: 100%;">
+                <i class="fas fa-save"></i> Save Entry
+            </button>
+        </form>
+    </div>
+
+    <h3 style="margin-bottom: 20px;">Previous Entries</h3>
+
+    {% if entries %}
+    {% for entry in entries %}
+    <div class="card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-weight: bold; color: var(--primary);">{{ entry.date }}</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="badge" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 8px;">{{ entry.mood }}</span>
+                <form action="{{ url_for('delete_journal_entry', entry_id=entry.id) }}" method="POST" style="margin: 0;">
+                    <button type="submit" style="background: transparent; border: none; color: #FF4D4D; cursor: pointer;" title="Delete Entry" onclick="return confirm('Are you sure?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <p style="color: var(--text-grey); white-space: pre-wrap;">{{ entry.text }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div style="text-align: center; color: var(--text-grey); padding: 40px;">
+        <i class="fas fa-book" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+        <p>No entries yet. Start writing today!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

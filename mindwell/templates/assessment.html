@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 800px; margin: 0 auto;">
+    <div class="card">
+        <!-- Assessment Type Switcher -->
+        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+            <a href="{{ url_for('assessment', type='phq9') }}" class="btn"
+                style="flex: 1; text-align: center; background: {% if type == 'phq9' %}var(--primary){% else %}transparent{% endif %}; border: 1px solid var(--primary); color: {% if type == 'phq9' %}white{% else %}var(--text-grey){% endif %};">Depression
+                (PHQ-9)</a>
+            <a href="{{ url_for('assessment', type='gad7') }}" class="btn"
+                style="flex: 1; text-align: center; background: {% if type == 'gad7' %}var(--primary){% else %}transparent{% endif %}; border: 1px solid var(--primary); color: {% if type == 'gad7' %}white{% else %}var(--text-grey){% endif %};">Anxiety
+                (GAD-7)</a>
+        </div>
+
+        <h1 style="text-align: center; color: var(--primary);">
+            {% if type == 'phq9' %}
+            Depression Assessment (PHQ-9)
+            {% else %}
+            Anxiety Assessment (GAD-7)
+            {% endif %}
+        </h1>
+
+        <form id="assessmentForm" action="{{ url_for('assessment', type=type) }}" method="POST">
+            {% set questions = [
+            "Little interest or pleasure in doing things",
+            "Feeling down, depressed, or hopeless",
+            "Trouble falling or staying asleep, or sleeping too much",
+            "Feeling tired or having little energy",
+            "Poor appetite or overeating",
+            "Feeling bad about yourself - or that you are a failure or have let yourself or your family down",
+            "Trouble concentrating on things, such as reading the newspaper or watching television",
+            "Moving or speaking so slowly that other people could have noticed",
+            "Thoughts that you would be better off dead, or of hurting yourself"
+            ] if type == 'phq9' else [
+            "Feeling nervous, anxious, or on edge",
+            "Not being able to stop or control worrying",
+            "Worrying too much about different things",
+            "Trouble relaxing",
+            "Being so restless that it is hard to sit still",
+            "Becoming easily annoyed or irritable",
+            "Feeling afraid, as if something awful might happen"
+            ] %}
+
+            <!-- Progress Bar -->
+            <div
+                style="background: var(--bg-dark); height: 10px; border-radius: 5px; margin-bottom: 30px; position: relative;">
+                <div id="progressBar"
+                    style="background: linear-gradient(to right, var(--primary), var(--secondary)); width: 0%; height: 100%; border-radius: 5px; transition: 0.3s;">
+                </div>
+            </div>
+
+            <div id="questionContainer">
+                {% for q in questions %}
+                <div class="question-step" data-index="{{ loop.index0 }}"
+                    style="display: {% if loop.first %}block{% else %}none{% endif %}; animation: fadeIn 0.5s;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 2rem; min-height: 80px;">{{ loop.index }}. {{ q }}</h2>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="option-card" onclick="selectOption({{ loop.index }}, 0)">
+                            <span style="font-size: 2rem;">🙂</span>
+                            <p>Not at all</p>
+                        </div>
+                        <div class="option-card" onclick="selectOption({{ loop.index }}, 1)">
+                            <span style="font-size: 2rem;">😐</span>
+                            <p>Several days</p>
+                        </div>
+                        <div class="option-card" onclick="selectOption({{ loop.index }}, 2)">
+                            <span style="font-size: 2rem;">😟</span>
+                            <p>More than half</p>
+                        </div>
+                        <div class="option-card" onclick="selectOption({{ loop.index }}, 3)">
+                            <span style="font-size: 2rem;">😫</span>
+                            <p>Nearly every day</p>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Input -->
+                    <input type="hidden" name="q{{ loop.index }}" id="input_q{{ loop.index }}" required>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div style="margin-top: 30px; text-align: center; color: var(--text-grey);">
+                Question <span id="currentQ">1</span> of {{ questions|length }}
+            </div>
+
+            <button id="submitBtn" type="submit" class="btn" style="width: 100%; margin-top: 2rem; display: none;">See
+                My Results</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .option-card {
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .option-card:hover {
+        border-color: var(--primary);
+        transform: translateY(-3px);
+        background: rgba(108, 93, 211, 0.1);
+    }
+
+    .option-card.selected {
+        background: var(--primary);
+        border-color: var(--primary);
+    }
+</style>
+
+<script>
+    let currentStep = 0;
+    const totalSteps = {{ questions| length }};
+
+    function selectOption(qIndex, value) {
+        // Set value
+        document.getElementById('input_q' + qIndex).value = value;
+
+        // Move to next
+        const steps = document.getElementsByClassName('question-step');
+        const currentStepDiv = steps[currentStep];
+
+        if (currentStep < totalSteps - 1) {
+            setTimeout(() => {
+                currentStepDiv.style.display = 'none';
+                currentStep++;
+                const nextStepDiv = steps[currentStep];
+                nextStepDiv.style.display = 'block';
+                updateProgress();
+            }, 300);
+        } else {
+            // Finished
+            setTimeout(() => {
+                currentStepDiv.style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'block';
+                document.getElementById('submitBtn').click();
+            }, 300);
+        }
+    }
+
+    function updateProgress() {
+        const percent = ((currentStep) / totalSteps) * 100;
+        document.getElementById('progressBar').style.width = percent + '%';
+        document.getElementById('currentQ').innerText = currentStep + 1;
+    }
+</script>
+{% endblock %}

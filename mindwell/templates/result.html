@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 600px; margin: 0 auto; text-align: center;">
+    <div class="card">
+        <h1 style="margin-bottom: 1rem;">Assessment Result</h1>
+
+        <div
+            style="width: 150px; height: 150px; border-radius: 50%; border: 8px solid var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 2rem;">
+            <h1 style="font-size: 3rem; margin: 0; color: var(--primary);">{{ score }}</h1>
+            <span style="font-size: 0.9rem; color: var(--text-grey);">Score</span>
+        </div>
+
+        <h2
+            style="color: {% if severity == 'Severe' %} #FF5C5C {% elif severity == 'Moderate' %} #FFCC00 {% else %} #4CD964 {% endif %};">
+            {{ severity }} {% if type == 'phq9' %}Depression{% else %}Anxiety{% endif %}
+        </h2>
+
+        <p style="margin: 20px 0; line-height: 1.6;">
+            Based on your answers, your symptoms appear to be <strong>{{ severity }}</strong>.
+            {% if severity == 'Severe' %}
+            We strongly recommend reaching out to a professional. Please consider using the SOS button or the Counsellor
+            tab.
+            {% elif severity == 'Moderate' %}
+            It might be helpful to try some of our breathing exercises or chat with our AI companion.
+            {% else %}
+            You are doing well! Keep maintaining your mental hygiene with daily journaling.
+            {% endif %}
+        </p>
+
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 2rem;">
+            <a href="{{ url_for('dashboard') }}" class="btn"
+                style="background: var(--bg-dark); border: 1px solid var(--border);">Back to Dashboard</a>
+            <a href="{{ url_for('resources') }}" class="btn">View Resources</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
